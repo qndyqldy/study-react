@@ -3,7 +3,7 @@ import Welcome from "./components/Welcome.jsx";
 function App() {
   return (
     <>
-      <Welcome name={"영욱"} isMember={true} />
+      <Welcome name={"영욱"} isMember={false} />
     </>
   )
 }
