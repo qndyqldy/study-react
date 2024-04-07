@@ -1,33 +1,41 @@
 import './App.css'
 import CurrencyInput from "./components/CurrencyInput.jsx";
-import {useEffect} from "react";
-import useInput from "./hooks/useInput.jsx";
+import {useState} from "react";
 
 function App() {
-  const [krw, setKrw] = useInput();
-  const [usd, setUsd] = useInput();
+  const [currency, setCurrency] = useState({
+    krw: 0,
+    usd: 0
+  });
 
-
-  const currency = 1300;
-  useEffect(() => {
-    setUsd(krw / currency);
-  }, [krw]);
-
-  useEffect(() => {
-    setKrw(usd * currency);
-  }, [usd]);
+  const CURRENT_CURRENCY = 1300;
+  const onChange = (currency, value) => {
+    if(currency === 'krw') {
+      setCurrency({
+        krw: value,
+        usd: value / CURRENT_CURRENCY
+      })
+    } else {
+      setCurrency({
+        krw: value * CURRENT_CURRENCY,
+        usd: value
+      })
+    }
+  }
 
   return (
     <>
       <h1>환율 변환기 (KRW-USD)</h1>
-      <section>
-        krw: <CurrencyInput money={krw} setMoney={setKrw} />
-      </section>
-      <section>
-        usd: <CurrencyInput money={usd} setMoney={setUsd} />
-      </section>
+        <CurrencyInput
+          currency={"krw"}
+          value={currency.krw}
+          setValue={onChange} />
+        <CurrencyInput
+          currency={"usd"}
+          value={currency.usd}
+          setValue={onChange} />
     </>
   )
 }
 
-export default App
+export default App;

@@ -1,13 +1,12 @@
-const CurrencyInput = ({money, setMoney}) => {
-  const onChange = (e) => {
-    setMoney(e.target.value);
-  }
-
+const CurrencyInput = ({currency, value, setValue}) => {
   return (
     <>
-      <input type="number"
-        value={money}
-        onChange={onChange}/>
+      <section>
+        {currency} :
+        <input type="number"
+          value={value}
+          onChange={(e) => setValue(currency, e.target.value)}/>
+        </section>
     </>
   )
 }
