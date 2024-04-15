@@ -1,7 +1,7 @@
 import './App.css'
 import ContactEditor from "./components/ContactEditor.jsx";
 import ContactList from "./components/ContactList.jsx";
-import {createContext, useCallback, useReducer, useRef} from "react";
+import {createContext, useCallback, useMemo, useReducer, useRef} from "react";
 
 const mockData = [
   {
@@ -51,7 +51,9 @@ function App() {
     })
   }, []);
 
-  const memoizedDispatch = {addContact, deleteContact};
+  const memoizedDispatch = useMemo(() => {
+    return {addContact, deleteContact}
+  }, []);
 
   return (
     <div className={"App"}>
