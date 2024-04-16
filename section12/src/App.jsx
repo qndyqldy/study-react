@@ -1,26 +1,36 @@
 import './App.css';
-import {createContext, useReducer, useRef} from "react";
-import {Routes, Route, useNavigate} from "react-router-dom";
+import {createContext, useMemo, useReducer, useRef} from "react";
+import {Routes, Route} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Diary from "./pages/Diary.jsx";
 import New from "./pages/New.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Edit from "./pages/Edit.jsx";
-import Button from "./components/Button.jsx";
-import Header from "./components/Header.jsx";
 
 const mockData = [
   {
     id: 1,
-    createdDate: new Date().getTime(),
+    createdDate: new Date('2024-04-16').getTime(),
     emotionId: 1,
     content: '1번 일기 내용'
   },
   {
     id: 2,
-    createdDate: new Date().getTime(),
+    createdDate: new Date('2024-04-15').getTime(),
     emotionId: 2,
     content: '2번 일기 내용'
+  },
+  {
+    id: 3,
+    createdDate: new Date('2024-03-20').getTime(),
+    emotionId: 3,
+    content: '3번 일기 내용'
+  },
+  {
+    id: 4,
+    createdDate: new Date('2024-05-20').getTime(),
+    emotionId: 4,
+    content: '4번 일기 내용'
   }
 ]
 export function reducer(state, action) {
@@ -41,7 +51,7 @@ export const DiaryDispatchContext = createContext();
 
 function App() {
   const [data, dispatch] = useReducer(reducer, mockData);
-  const idRef = useRef(2);
+  const idRef = useRef(5);
 
   const onCreate = (createdDate, emotionId, content) => {
     dispatch({
@@ -74,29 +84,17 @@ function App() {
     })
   }
 
+  const memoizedDispatch = useMemo(() => {
+    return {
+      onCreate, onUpdate, onDelete
+    }
+  }, [])
+
   return (
     <>
-      <Header
-        title={"Header"}
-        leftChild={<Button text={"<"} />}
-        rightChild={<Button text={">"} />}/>
-
-      <button onClick={() => {
-        onCreate(new Date().getTime, 1, '첫번째 일기');
-      }} >일기추가 테스트</button>
-      <button onClick={() => {
-        onUpdate(1, new Date().getTime(), 3, "수정된 일기")
-      }}>일기 수정 테스트</button>
-      <button onClick={() => {
-        onDelete(1);
-      }}>일기 삭제 테스트</button>
-
       {/*Routes 컴포넌트 안에는 Route 컴포넌트만 사용 가능하다*/}
       <DiaryStateContext.Provider value={data}>
-        <DiaryDispatchContext.Provider
-          value={
-            {onCreate, onUpdate, onDelete}
-          }>
+        <DiaryDispatchContext.Provider value={memoizedDispatch}>
           <Routes>
             <Route path={"/"} element={<Home />} />
             <Route path={"/new"} element={<New />} />
