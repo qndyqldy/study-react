@@ -40,7 +40,8 @@ export function reducer(state, action) {
     case 'UPDATE':
       return state.map(item => String(item.id) === String(action.data.id) ? action.data : item);
     case 'DELETE':
-      return state.filter(diary => diary.id !== action.targetId);
+      console.log('delete');
+      return state.filter(diary => String(diary.id) !== String(action.targetId));
     default:
       return state;
   }
